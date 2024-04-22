@@ -1,6 +1,6 @@
 ---
 title: "Data Visualization"
-author: "Joschka Schwarz"
+author: "Milan Bhardwaj"
 ---
 
 ::: callout-note
