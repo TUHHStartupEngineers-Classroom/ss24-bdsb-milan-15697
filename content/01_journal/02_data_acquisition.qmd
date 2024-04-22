@@ -1,8 +1,72 @@
 ---
 title: "Data Acquisition"
-author: "Milan Bhardwaj"
+author: "**Milan Bhardwaj**, *Matr. Nr. 562289*"
 ---
 
 ::: callout-note
-You can delete everything in here and start fresh.
+Challenge 1 - API
 :::
+
+
+```{r}
+#Step 1 Packages
+
+      library(httr)
+      library(jsonlite)
+      library(tidyverse)
+      library(ggplot2)
+      library(kableExtra)
+
+#Step 2 Getting data from Stocks API
+      
+      resp <- GET("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo")
+
+#Step 3 Parsing the response and reading targetted latest high and low values for the stock
+
+      result <- rawToChar(resp$content) %>% fromJSON()
+      stock_high <- result[2]
+      stock_low <- result[2]
+      
+      stockdf <- data.frame(stock_high, stock_low) %>% head(n = 40)
+```
+
+###### Displaying latest IBM stock high and low in the form of a table visualization
+```{r}
+#Step 4 Display df as table
+kable(stockdf, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+```
+
+::: callout-note
+Challenge 2 - Scraping
+:::
+
+```{r}
+
+#Step 1 Packages
+
+library(rvest)
+
+
+#Step 2 Data Scrapping
+
+  url <- "https://www.rosebikes.de/fahrr%C3%A4der/gravel"
+  html <- url %>%
+  read_html()
+
+  title <- html %>%
+  html_nodes("h4.basic-headline__title") %>%
+  html_text()
+
+  price <- html %>%
+  html_nodes("div.catalog-category-bikes__price-title") %>%
+  html_text() %>%
+  parse_number(locale = locale(decimal_mark = ",", grouping_mark = "."))
+
+#Step 3 Output from dataframe
+
+res <- data.frame(title, price)
+print(res)
+
+```
