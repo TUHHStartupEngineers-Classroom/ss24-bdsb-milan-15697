@@ -1,8 +1,112 @@
 ---
 title: "Data Wrangling"
-author: "Milan Bhardwaj"
+author: "**Milan Bhardwaj**, *Matr. Nr. 562289*"
 ---
 
 ::: callout-note
-You can delete everything in here and start fresh.
+Data set in use- 2014 (reduced).
 :::
+
+# Preparation
+
+```{r}
+
+#Step 1 Packages
+
+library(httr)
+library(tidyverse)
+library(dplyr)
+library(jsonlite)
+library(vroom)
+
+#Step 2 Importing Data
+
+col_types <- list(
+  id = col_character(),
+  type = col_character(),
+  number = col_character(),
+  country = col_character(),
+  date = col_date("%Y-%m-%d"),
+  abstract = col_character(),
+  title = col_character(),
+  kind = col_character(),
+  num_claims = col_double(),
+  filename = col_character(),
+  withdrawn = col_double()
+)
+
+patent_tbl <- vroom(
+      file       = "data/patent.tsv", 
+      delim      = "\t", 
+      col_types  = col_types,
+      na         = c("", "NA", "NULL")
+)
+
+patent_assignee <- vroom(
+  file = "data/patent_assignee.tsv",
+  delim = "\t",
+  na         = c("", "NA", "NULL")
+)
+
+assignee <- vroom(
+  file = "data/assignee.tsv",
+  delim = "\t",
+  na         = c("", "NA", "NULL")
+)
+
+uspc <- vroom(
+  file = "data/uspc.tsv",
+  delim = "\t",
+  col_types = list(
+    patent_id = col_character()
+  ),
+  na         = c("", "NA", "NULL")
+)
+
+#Step 3 combining tables together
+
+final_data <- left_join(patent_tbl, patent_assignee, by = c("id" = "patent_id"))
+final_data <- left_join(final_data, assignee, by = c("assignee_id" = "id")) 
+
+```
+
+
+# Question 1- Patent Dominance: The 10 US companies with the most (assigned) patents
+
+```{r}
+
+patent_claims <- final_data %>% 
+  select(organization, num_claims) %>% 
+  group_by(organization) %>% 
+  summarise(claims = sum(num_claims))
+
+# cleaning a bit
+patent_claims <- patent_claims[patent_claims$organization != 'NA',]
+# Ordering by highest
+patent_claims <- patent_claims[order(patent_claims$claims,decreasing=TRUE),]
+```
+
+### Creating the Chart
+```{r}
+head(patent_claims, n=10)
+```
+
+# Question 2- Recent patent activity: The top 10 companies with the most new granted patents for August 2014
+```{r}
+
+patents_2014_august <- final_data[format.Date(final_data$date, "%m")=="08" & !is.na(final_data$date),] %>% 
+  select(organization, num_claims) %>% 
+  group_by(organization) %>% 
+  summarise(claims = sum(num_claims))
+
+# cleaning a bit
+patents_2014_august <- patents_2014_august[patents_2014_august$organization != 'NA',]
+# Ordering by highest
+patents_2014_august <- patents_2014_august[order(patents_2014_august$claims,decreasing=TRUE),]
+
+```
+
+### Creating the Chart
+```{r}
+head(patents_2014_august,n=10)
+```

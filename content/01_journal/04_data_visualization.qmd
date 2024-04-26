@@ -1,6 +1,6 @@
 ---
 title: "Data Visualization"
-author: "Milan Bhardwaj"
+author: "**Milan Bhardwaj**, *Matr. Nr. 562289*"
 ---
 
 ::: callout-note
