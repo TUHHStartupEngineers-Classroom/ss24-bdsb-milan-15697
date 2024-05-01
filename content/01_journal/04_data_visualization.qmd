@@ -3,6 +3,126 @@ title: "Data Visualization"
 author: "**Milan Bhardwaj**, *Matr. Nr. 562289*"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+# First Challenge
+## Goal: Map the time course of the cumulative Covid-19 cases!
+
+```{r}
+
+library(tidyverse)
+
+covid_data <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+countries <- covid_data %>%
+  group_by(location) %>% 
+  group_split(.keep = TRUE)
+
+```
+
+## Filter
+
+```{r}
+filter <- c("Germany", "India", "Netherlands", "Canada", "Australia")
+
+getCountry <- function(x, country){
+  countries_select <- data.frame()
+  for(i in 1:length(x)){
+    if(x[[i]]$location[[1]] %in% country){
+      return (x[[i]])
+    } else {
+      next
+    }
+  }
+  return (countries_select)
+}
+
+```
+
+## Calling function for individual countries
+
+```{r}
+
+res <- 
+  getCountry(countries, c("Germany")) %>% 
+  rbind(getCountry(countries, c("India"))) %>% 
+  rbind(getCountry(countries, c("Netherlands"))) %>% 
+  rbind(getCountry(countries, c("Canada"))) %>% 
+  rbind(getCountry(countries, c("Australia")))
+
+
+```
+  
+## Visualization
+
+```{r} 
+library(viridis)
+
+res %>% 
+  ggplot(aes(date, total_cases, color = location))+
+  
+  geom_line(linewidth = 0.5) + 
+  scale_y_continuous(labels = scales::comma) +
+  theme(
+    legend.position = "bottom",
+  ) + 
+  
+  labs(
+    title = "cases by country",
+    x = "year",
+    y = "sum",
+    color = "Country",
+  )
+```
+
+# Second Challenge
+
+## Goal: Visualize the distribution of the mortality rate (deaths / population)
+
+```{r}
+covid_data <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+```
+
+## Data Segregation
+
+```{r}
+data <- covid_data %>% 
+  select(location, total_deaths) %>% 
+  group_by(location) %>% 
+  slice_max(order_by = total_deaths, n = 1) %>% 
+  mutate(location = case_when(
+    
+    location == "India" ~ "India",
+    location == "Germany" ~ "Germany",
+    location == "Canada" ~ "Canada",
+    TRUE ~ location
+    
+  )) %>%
+  distinct()
+
+```
+
+## Longitudinal and lateral data
+
+```{r}
+world <- map_data("world")
+```
+
+## Final Plot
+
+```{r}
+final_plot <- ggplot() +
+  geom_map(data = world, map = world,
+           aes(x = long, y = lat, group = group, map_id=region),
+           fill = "white", colour = "#7f7f7f", linewidth = 0.5) +
+  
+  geom_map(data = data, map=world,
+           aes(fill=total_deaths, map_id=location, color = total_deaths),
+           colour="#7f7f7f", linewidth=0.5) +
+  
+  scale_fill_continuous(low="red", high="black", guide="colorbar") +
+  scale_y_continuous(breaks=c()) +
+  scale_x_continuous(breaks=c()) +
+  labs(title="Covid Deaths", fill="Scale") +
+  theme_bw()
+
+final_plot
+
+```

@@ -25,7 +25,63 @@
     "href": "content/01_journal/04_data_visualization.html",
     "title": "Data Visualization",
     "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+    "text": "library(tidyverse)\n\n#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4\n#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0\n#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n#&gt; ✔ purrr     1.0.1     \n#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n#&gt; ✖ dplyr::filter() masks stats::filter()\n#&gt; ✖ dplyr::lag()    masks stats::lag()\n#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ncovid_data &lt;- read_csv(\"https://covid.ourworldindata.org/data/owid-covid-data.csv\")\n\n#&gt; Rows: 394167 Columns: 67\n#&gt; ── Column specification ────────────────────────────────────────────────────────\n#&gt; Delimiter: \",\"\n#&gt; chr   (4): iso_code, continent, location, tests_units\n#&gt; dbl  (62): total_cases, new_cases, new_cases_smoothed, total_deaths, new_dea...\n#&gt; date  (1): date\n#&gt; \n#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.\n#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\ncountries &lt;- covid_data %&gt;%\n  group_by(location) %&gt;% \n  group_split(.keep = TRUE)\n\n\n\n\n\nfilter &lt;- c(\"Germany\", \"India\", \"Netherlands\", \"Canada\", \"Australia\")\n\ngetCountry &lt;- function(x, country){\n  countries_select &lt;- data.frame()\n  for(i in 1:length(x)){\n    if(x[[i]]$location[[1]] %in% country){\n      return (x[[i]])\n    } else {\n      next\n    }\n  }\n  return (countries_select)\n}\n\n\n\n\n\nres &lt;- \n  getCountry(countries, c(\"Germany\")) %&gt;% \n  rbind(getCountry(countries, c(\"India\"))) %&gt;% \n  rbind(getCountry(countries, c(\"Netherlands\"))) %&gt;% \n  rbind(getCountry(countries, c(\"Canada\"))) %&gt;% \n  rbind(getCountry(countries, c(\"Australia\")))\n\n\n\n\n\nlibrary(viridis)\n\nres %&gt;% \n  ggplot(aes(date, total_cases, color = location))+\n  \n  geom_line(linewidth = 0.5) + \n  scale_y_continuous(labels = scales::comma) +\n  theme(\n    legend.position = \"bottom\",\n  ) + \n  \n  labs(\n    title = \"cases by country\",\n    x = \"year\",\n    y = \"sum\",\n    color = \"Country\",\n  )\n\n#&gt; Warning: Removed 162 rows containing missing values (`geom_line()`)."
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#goal-map-the-time-course-of-the-cumulative-covid-19-cases",
+    "href": "content/01_journal/04_data_visualization.html#goal-map-the-time-course-of-the-cumulative-covid-19-cases",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "library(tidyverse)\n\n#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4\n#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0\n#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n#&gt; ✔ purrr     1.0.1     \n#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n#&gt; ✖ dplyr::filter() masks stats::filter()\n#&gt; ✖ dplyr::lag()    masks stats::lag()\n#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ncovid_data &lt;- read_csv(\"https://covid.ourworldindata.org/data/owid-covid-data.csv\")\n\n#&gt; Rows: 394167 Columns: 67\n#&gt; ── Column specification ────────────────────────────────────────────────────────\n#&gt; Delimiter: \",\"\n#&gt; chr   (4): iso_code, continent, location, tests_units\n#&gt; dbl  (62): total_cases, new_cases, new_cases_smoothed, total_deaths, new_dea...\n#&gt; date  (1): date\n#&gt; \n#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.\n#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\ncountries &lt;- covid_data %&gt;%\n  group_by(location) %&gt;% \n  group_split(.keep = TRUE)"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#filter",
+    "href": "content/01_journal/04_data_visualization.html#filter",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "filter &lt;- c(\"Germany\", \"India\", \"Netherlands\", \"Canada\", \"Australia\")\n\ngetCountry &lt;- function(x, country){\n  countries_select &lt;- data.frame()\n  for(i in 1:length(x)){\n    if(x[[i]]$location[[1]] %in% country){\n      return (x[[i]])\n    } else {\n      next\n    }\n  }\n  return (countries_select)\n}"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#calling-function-for-individual-countries",
+    "href": "content/01_journal/04_data_visualization.html#calling-function-for-individual-countries",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "res &lt;- \n  getCountry(countries, c(\"Germany\")) %&gt;% \n  rbind(getCountry(countries, c(\"India\"))) %&gt;% \n  rbind(getCountry(countries, c(\"Netherlands\"))) %&gt;% \n  rbind(getCountry(countries, c(\"Canada\"))) %&gt;% \n  rbind(getCountry(countries, c(\"Australia\")))"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#visualization",
+    "href": "content/01_journal/04_data_visualization.html#visualization",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "library(viridis)\n\nres %&gt;% \n  ggplot(aes(date, total_cases, color = location))+\n  \n  geom_line(linewidth = 0.5) + \n  scale_y_continuous(labels = scales::comma) +\n  theme(\n    legend.position = \"bottom\",\n  ) + \n  \n  labs(\n    title = \"cases by country\",\n    x = \"year\",\n    y = \"sum\",\n    color = \"Country\",\n  )\n\n#&gt; Warning: Removed 162 rows containing missing values (`geom_line()`)."
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#goal-visualize-the-distribution-of-the-mortality-rate-deaths-population",
+    "href": "content/01_journal/04_data_visualization.html#goal-visualize-the-distribution-of-the-mortality-rate-deaths-population",
+    "title": "Data Visualization",
+    "section": "2.1 Goal: Visualize the distribution of the mortality rate (deaths / population)",
+    "text": "2.1 Goal: Visualize the distribution of the mortality rate (deaths / population)\n\ncovid_data &lt;- read_csv(\"https://covid.ourworldindata.org/data/owid-covid-data.csv\")\n\n#&gt; Rows: 394167 Columns: 67\n#&gt; ── Column specification ────────────────────────────────────────────────────────\n#&gt; Delimiter: \",\"\n#&gt; chr   (4): iso_code, continent, location, tests_units\n#&gt; dbl  (62): total_cases, new_cases, new_cases_smoothed, total_deaths, new_dea...\n#&gt; date  (1): date\n#&gt; \n#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.\n#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#data-segregation",
+    "href": "content/01_journal/04_data_visualization.html#data-segregation",
+    "title": "Data Visualization",
+    "section": "2.2 Data Segregation",
+    "text": "2.2 Data Segregation\n\ndata &lt;- covid_data %&gt;% \n  select(location, total_deaths) %&gt;% \n  group_by(location) %&gt;% \n  slice_max(order_by = total_deaths, n = 1) %&gt;% \n  mutate(location = case_when(\n    \n    location == \"India\" ~ \"India\",\n    location == \"Germany\" ~ \"Germany\",\n    location == \"Canada\" ~ \"Canada\",\n    TRUE ~ location\n    \n  )) %&gt;%\n  distinct()"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#longitudinal-and-lateral-data",
+    "href": "content/01_journal/04_data_visualization.html#longitudinal-and-lateral-data",
+    "title": "Data Visualization",
+    "section": "2.3 Longitudinal and lateral data",
+    "text": "2.3 Longitudinal and lateral data\n\nworld &lt;- map_data(\"world\")"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#final-plot",
+    "href": "content/01_journal/04_data_visualization.html#final-plot",
+    "title": "Data Visualization",
+    "section": "2.4 Final Plot",
+    "text": "2.4 Final Plot\n\nfinal_plot &lt;- ggplot() +\n  geom_map(data = world, map = world,\n           aes(x = long, y = lat, group = group, map_id=region),\n           fill = \"white\", colour = \"#7f7f7f\", linewidth = 0.5) +\n  \n  geom_map(data = data, map=world,\n           aes(fill=total_deaths, map_id=location, color = total_deaths),\n           colour=\"#7f7f7f\", linewidth=0.5) +\n  \n  scale_fill_continuous(low=\"red\", high=\"black\", guide=\"colorbar\") +\n  scale_y_continuous(breaks=c()) +\n  scale_x_continuous(breaks=c()) +\n  labs(title=\"Covid Deaths\", fill=\"Scale\") +\n  theme_bw()\n\n#&gt; Warning in geom_map(data = world, map = world, aes(x = long, y = lat, group =\n#&gt; group, : Ignoring unknown aesthetics: x and y\n\nfinal_plot"
   },
   {
     "objectID": "content/03_other/06_links.html",
