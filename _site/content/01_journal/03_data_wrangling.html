@@ -176,6 +176,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#preparation" id="toc-preparation" class="nav-link active" data-scroll-target="#preparation"><span class="header-section-number">1</span> Preparation</a></li>
   <li><a href="#question-1--patent-dominance-the-10-us-companies-with-the-most-assigned-patents" id="toc-question-1--patent-dominance-the-10-us-companies-with-the-most-assigned-patents" class="nav-link" data-scroll-target="#question-1--patent-dominance-the-10-us-companies-with-the-most-assigned-patents"><span class="header-section-number">2</span> Question 1- Patent Dominance: The 10 US companies with the most (assigned) patents</a></li>
   <li><a href="#question-2--recent-patent-activity-the-top-10-companies-with-the-most-new-granted-patents-for-august-2014" id="toc-question-2--recent-patent-activity-the-top-10-companies-with-the-most-new-granted-patents-for-august-2014" class="nav-link" data-scroll-target="#question-2--recent-patent-activity-the-top-10-companies-with-the-most-new-granted-patents-for-august-2014"><span class="header-section-number">3</span> Question 2- Recent patent activity: The top 10 companies with the most new granted patents for August 2014</a></li>
+  <li><a href="#question-3" id="toc-question-3" class="nav-link" data-scroll-target="#question-3"><span class="header-section-number">4</span> Question 3</a>
+  <ul class="collapse">
+  <li><a href="#innovation-in-tech-what-is-the-most-innovative-tech-sector-for-the-top-10-companies-worldwide-with-the-most-patents-what-are-the-top-5-uspto-tech-main-classes" id="toc-innovation-in-tech-what-is-the-most-innovative-tech-sector-for-the-top-10-companies-worldwide-with-the-most-patents-what-are-the-top-5-uspto-tech-main-classes" class="nav-link" data-scroll-target="#innovation-in-tech-what-is-the-most-innovative-tech-sector-for-the-top-10-companies-worldwide-with-the-most-patents-what-are-the-top-5-uspto-tech-main-classes"><span class="header-section-number">4.1</span> Innovation in Tech: What is the most innovative tech sector? For the top 10 companies (worldwide) with the most patents, what are the top 5 USPTO tech main classes?</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -384,6 +388,24 @@ Note
   </script>
 </div>
 </div>
+</div>
+</section>
+</section>
+<section id="question-3" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Question 3</h1>
+<section id="innovation-in-tech-what-is-the-most-innovative-tech-sector-for-the-top-10-companies-worldwide-with-the-most-patents-what-are-the-top-5-uspto-tech-main-classes" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="innovation-in-tech-what-is-the-most-innovative-tech-sector-for-the-top-10-companies-worldwide-with-the-most-patents-what-are-the-top-5-uspto-tech-main-classes"><span class="header-section-number">4.1</span> Innovation in Tech: What is the most innovative tech sector? For the top 10 companies (worldwide) with the most patents, what are the top 5 USPTO tech main classes?</h2>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-6_c22b67f32ec234b46a507d76fd6ba4c6">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Execution halting because of memory issues. Error is attached below</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co"># Error: vector memory exhausted (limit reached?)</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># res_tbl &lt;- merge(uspc, final_data)</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co"># </span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co"># top_organizations &lt;- top10$organization</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co"># </span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co"># setkey(res_tbl, 'organization')</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># </span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co"># res_tbl[organization %in% top_organizations, .N, mainclass_id][order(-N)][1:5]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

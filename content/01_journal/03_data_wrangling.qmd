@@ -117,13 +117,16 @@ head(patents_2014_august,n=10)
 
 ```{r}
 
-res_tbl <- merge(uspc, final_data)
+# Execution halting because of memory issues. Error is attached below
+# Error: vector memory exhausted (limit reached?)
 
-top_organizations <- top10$organization
-
-setkey(res_tbl, 'organization')
-
-res_tbl[organization %in% top_organizations, .N, mainclass_id][order(-N)][1:5]
+# res_tbl <- merge(uspc, final_data)
+# 
+# top_organizations <- top10$organization
+# 
+# setkey(res_tbl, 'organization')
+# 
+# res_tbl[organization %in% top_organizations, .N, mainclass_id][order(-N)][1:5]
 
 ```
 
