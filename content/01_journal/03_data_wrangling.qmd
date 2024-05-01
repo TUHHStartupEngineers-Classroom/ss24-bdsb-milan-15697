@@ -110,3 +110,26 @@ patents_2014_august <- patents_2014_august[order(patents_2014_august$claims,decr
 ```{r}
 head(patents_2014_august,n=10)
 ```
+
+# Question 3 
+## Innovation in Tech: What is the most innovative tech sector? For the top 10 companies (worldwide) with the most patents, what are the top 5 USPTO tech main classes?
+
+
+```{r}
+
+res_tbl <- merge(uspc, final_data)
+
+top_organizations <- top10$organization
+
+setkey(res_tbl, 'organization')
+
+res_tbl[organization %in% top_organizations, .N, mainclass_id][order(-N)][1:5]
+
+```
+
+
+
+
+
+
+
