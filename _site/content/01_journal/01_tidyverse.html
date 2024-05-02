@@ -77,6 +77,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -174,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul class="collapse">
   <li><a href="#challenge-1-analyze-the-sales-by-location-state-with-a-bar-plot." id="toc-challenge-1-analyze-the-sales-by-location-state-with-a-bar-plot." class="nav-link active" data-scroll-target="#challenge-1-analyze-the-sales-by-location-state-with-a-bar-plot."><span class="header-section-number">1</span> Challenge 1: Analyze the sales by location (state) with a bar plot.</a></li>
+  <li><a href="#step-2---visualize" id="toc-step-2---visualize" class="nav-link" data-scroll-target="#step-2---visualize"><span class="header-section-number">2</span> Step 2 - Visualize</a>
+  <ul class="collapse">
+  <li><a href="#visualization--12-plots" id="toc-visualization--12-plots" class="nav-link" data-scroll-target="#visualization--12-plots"><span class="header-section-number">2.1</span> 2. Visualization- 12 Plots</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -252,8 +259,102 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-18"><a href="#cb7-18"></a>  <span class="fu">rename</span>(<span class="at">bikeshop =</span> name) <span class="sc">%&gt;%</span></span>
 <span id="cb7-19"><a href="#cb7-19"></a>  <span class="fu">set_names</span>(<span class="fu">names</span>(.) <span class="sc">%&gt;%</span> <span class="fu">str_replace_all</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">."</span>, <span class="st">"_"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-4_c653ad3a571f94d73a7d106671c899ea">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Sales by location ----</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>sales_by_loc <span class="ot">&lt;-</span> bike_orderlines_wrangled_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  </span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">select</span>(order_date, state, total_price) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(order_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-8"><a href="#cb8-8"></a>  <span class="fu">summarize</span>(<span class="at">sales =</span> <span class="fu">sum</span>(total_price)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>  </span>
+<span id="cb8-10"><a href="#cb8-10"></a>  <span class="fu">mutate</span>(<span class="at">sales_text =</span> scales<span class="sc">::</span><span class="fu">dollar</span>(sales, <span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>, <span class="at">prefix =</span> <span class="st">"EUR "</span>))</span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a>sales_by_loc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["state"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sales"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sales_text"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Baden-Württemberg","2":"6521090","3":"EUR 6.521.090"},{"1":"Bavaria","2":"6742819","3":"EUR 6.742.819"},{"1":"Berlin","2":"1128433","3":"EUR 1.128.433"},{"1":"Bremen","2":"10653499","3":"EUR 10.653.499"},{"1":"Hamburg","2":"3874756","3":"EUR 3.874.756"},{"1":"Hesse","2":"1558901","3":"EUR 1.558.901"},{"1":"Lower Saxony","2":"4107115","3":"EUR 4.107.115"},{"1":"Mecklenburg-Western Pomerania","2":"618974","3":"EUR 618.974"},{"1":"North Rhine-Westphalia","2":"21200613","3":"EUR 21.200.613"},{"1":"Saxony","2":"2230245","3":"EUR 2.230.245"},{"1":"Saxony-Anhalt","2":"569614","3":"EUR 569.614"},{"1":"Schleswig-Holstein","2":"3224749","3":"EUR 3.224.749"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2---visualize" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Step 2 - Visualize</h1>
+<div class="cell" data-hash="01_tidyverse_cache/html/plot_67a11c09fe18103ff9934ec567ec8223">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>sales_by_loc <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>  </span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> state, <span class="at">y =</span> sales)) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  </span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#354555"</span>) <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">geom_label</span>(<span class="fu">aes</span>(<span class="at">label =</span> sales_text)) <span class="sc">+</span> </span>
+<span id="cb9-7"><a href="#cb9-7"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
+<span id="cb9-8"><a href="#cb9-8"></a>  </span>
+<span id="cb9-9"><a href="#cb9-9"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>, <span class="at">prefix =</span> <span class="st">"EUR "</span>)) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Revenue by location"</span>, <span class="at">x =</span> <span class="st">"State"</span>, <span class="at">y =</span> <span class="st">"Revenue"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; `geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="01_tidyverse_files/figure-html/plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="01_tidyverse_files/figure-html/plot-1.png" class="img-fluid figure-img" width="768"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-5_bf3f42dcca635b57a54e1c33111e94c6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Sales by Year and location </span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>sales_by_year_location_tbl <span class="ot">&lt;-</span> bike_orderlines_wrangled_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">select</span>(order_date, total_price, state) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(order_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>  </span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">group_by</span>(year, state) <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>  <span class="fu">summarise</span>(<span class="at">sales =</span> <span class="fu">sum</span>(total_price)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>  </span>
+<span id="cb11-10"><a href="#cb11-10"></a>  <span class="fu">mutate</span>(<span class="at">sales_text =</span> scales<span class="sc">::</span><span class="fu">dollar</span>(sales, <span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>, <span class="at">prefix =</span> <span class="st">"EUR "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; `summarise()` has grouped output by 'year'. You can override using the
+#&gt; `.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>sales_by_year_location_tbl  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["sales"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sales_text"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"2015","2":"Baden-Württemberg","3":"1031924","4":"EUR 1.031.924"},{"1":"2015","2":"Bavaria","3":"1301461","4":"EUR 1.301.461"},{"1":"2015","2":"Berlin","3":"95853","4":"EUR 95.853"},{"1":"2015","2":"Bremen","3":"1395912","4":"EUR 1.395.912"},{"1":"2015","2":"Hamburg","3":"423090","4":"EUR 423.090"},{"1":"2015","2":"Hesse","3":"308609","4":"EUR 308.609"},{"1":"2015","2":"Lower Saxony","3":"584386","4":"EUR 584.386"},{"1":"2015","2":"Mecklenburg-Western Pomerania","3":"222003","4":"EUR 222.003"},{"1":"2015","2":"North Rhine-Westphalia","3":"3735092","4":"EUR 3.735.092"},{"1":"2015","2":"Saxony","3":"238371","4":"EUR 238.371"},{"1":"2015","2":"Saxony-Anhalt","3":"144737","4":"EUR 144.737"},{"1":"2015","2":"Schleswig-Holstein","3":"448844","4":"EUR 448.844"},{"1":"2016","2":"Baden-Württemberg","3":"1561658","4":"EUR 1.561.658"},{"1":"2016","2":"Bavaria","3":"1129852","4":"EUR 1.129.852"},{"1":"2016","2":"Berlin","3":"72361","4":"EUR 72.361"},{"1":"2016","2":"Bremen","3":"2057760","4":"EUR 2.057.760"},{"1":"2016","2":"Hamburg","3":"636550","4":"EUR 636.550"},{"1":"2016","2":"Hesse","3":"225647","4":"EUR 225.647"},{"1":"2016","2":"Lower Saxony","3":"639839","4":"EUR 639.839"},{"1":"2016","2":"Mecklenburg-Western Pomerania","3":"75443","4":"EUR 75.443"},{"1":"2016","2":"North Rhine-Westphalia","3":"3002792","4":"EUR 3.002.792"},{"1":"2016","2":"Saxony","3":"589994","4":"EUR 589.994"},{"1":"2016","2":"Saxony-Anhalt","3":"65901","4":"EUR 65.901"},{"1":"2016","2":"Schleswig-Holstein","3":"672710","4":"EUR 672.710"},{"1":"2017","2":"Baden-Württemberg","3":"1224152","4":"EUR 1.224.152"},{"1":"2017","2":"Bavaria","3":"1411851","4":"EUR 1.411.851"},{"1":"2017","2":"Berlin","3":"451293","4":"EUR 451.293"},{"1":"2017","2":"Bremen","3":"2557145","4":"EUR 2.557.145"},{"1":"2017","2":"Hamburg","3":"731678","4":"EUR 731.678"},{"1":"2017","2":"Hesse","3":"338783","4":"EUR 338.783"},{"1":"2017","2":"Lower Saxony","3":"1055747","4":"EUR 1.055.747"},{"1":"2017","2":"Mecklenburg-Western Pomerania","3":"201218","4":"EUR 201.218"},{"1":"2017","2":"North Rhine-Westphalia","3":"4671541","4":"EUR 4.671.541"},{"1":"2017","2":"Saxony","3":"595378","4":"EUR 595.378"},{"1":"2017","2":"Saxony-Anhalt","3":"194509","4":"EUR 194.509"},{"1":"2017","2":"Schleswig-Holstein","3":"1076996","4":"EUR 1.076.996"},{"1":"2018","2":"Baden-Württemberg","3":"1114327","4":"EUR 1.114.327"},{"1":"2018","2":"Bavaria","3":"1168783","4":"EUR 1.168.783"},{"1":"2018","2":"Berlin","3":"318974","4":"EUR 318.974"},{"1":"2018","2":"Bremen","3":"1833844","4":"EUR 1.833.844"},{"1":"2018","2":"Hamburg","3":"930803","4":"EUR 930.803"},{"1":"2018","2":"Hesse","3":"330647","4":"EUR 330.647"},{"1":"2018","2":"Lower Saxony","3":"929624","4":"EUR 929.624"},{"1":"2018","2":"Mecklenburg-Western Pomerania","3":"21041","4":"EUR 21.041"},{"1":"2018","2":"North Rhine-Westphalia","3":"4601681","4":"EUR 4.601.681"},{"1":"2018","2":"Saxony","3":"338344","4":"EUR 338.344"},{"1":"2018","2":"Saxony-Anhalt","3":"81163","4":"EUR 81.163"},{"1":"2018","2":"Schleswig-Holstein","3":"572622","4":"EUR 572.622"},{"1":"2019","2":"Baden-Württemberg","3":"1589029","4":"EUR 1.589.029"},{"1":"2019","2":"Bavaria","3":"1730872","4":"EUR 1.730.872"},{"1":"2019","2":"Berlin","3":"189952","4":"EUR 189.952"},{"1":"2019","2":"Bremen","3":"2808838","4":"EUR 2.808.838"},{"1":"2019","2":"Hamburg","3":"1152635","4":"EUR 1.152.635"},{"1":"2019","2":"Hesse","3":"355215","4":"EUR 355.215"},{"1":"2019","2":"Lower Saxony","3":"897519","4":"EUR 897.519"},{"1":"2019","2":"Mecklenburg-Western Pomerania","3":"99269","4":"EUR 99.269"},{"1":"2019","2":"North Rhine-Westphalia","3":"5189507","4":"EUR 5.189.507"},{"1":"2019","2":"Saxony","3":"468158","4":"EUR 468.158"},{"1":"2019","2":"Saxony-Anhalt","3":"83304","4":"EUR 83.304"},{"1":"2019","2":"Schleswig-Holstein","3":"453577","4":"EUR 453.577"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<section id="visualization--12-plots" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="visualization--12-plots"><span class="header-section-number">2.1</span> 2. Visualization- 12 Plots</h2>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-6_9aa60aed0ac0135d1f6fcf638b60c4df">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>sales_by_year_location_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> sales, <span class="at">fill =</span> state)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> state) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>  </span>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>, <span class="at">prefix =</span> <span class="st">"EUR "</span>)) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-8"><a href="#cb14-8"></a>    <span class="at">title =</span> <span class="st">"Revenue by year and state"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9"></a>    <span class="at">fill =</span> <span class="st">"state"</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a>  )<span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="01_tidyverse_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="01_tidyverse_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -606,6 +707,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":true,"descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});</script>
 
 
 
